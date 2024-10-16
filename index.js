@@ -2,13 +2,15 @@
 
 // add function :
 function add(numbers) {
-    if (!numbers) return 0; 
-    
+    if (!numbers) return 0;
+  
     return numbers
+      .replace(/\n/g, ",")
       .split(",")
       .map(Number)
-      .reduce((sum, num) => sum + num, 0); 
-  }
+      .reduce((sum, num) => sum + num, 0);
+}
+
 
 /* Test cases */
 
@@ -43,6 +45,12 @@ function testManyNumbers() {
     console.assert(result === 150, `Expected 150 but got ${result}`);
   }
 
+// Test 6 : Test for new lines between numbers
+
+function testNewLineBetweenNumbers() {
+    const result = add("1\n2,3");
+    console.assert(result === 6, `Expected 6 but got ${result}`);
+}
 
 // Test calls:
 testEmptyString();
@@ -50,4 +58,5 @@ testSingleNumber();
 testTwoNumbers();
 testMultipleNumbers();
 testManyNumbers();
+testNewLineBetweenNumbers()
 

@@ -7,3 +7,4 @@
 4. Refractor code 
 5. Handle more than two numbers : Passed 
 6. Additional test case with more numbers : Passed
+7. Test for new lines between numbers : Passed
