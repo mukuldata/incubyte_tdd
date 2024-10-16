@@ -114,4 +114,5 @@ testManyNumbers();
 testNewLineBetweenNumbers();
 testCustomDelimiter();
 testNegativeNumbers();
+testIgnoreNumbersAbove1000()
 
