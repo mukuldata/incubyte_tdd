@@ -2,12 +2,12 @@
 
 // add function :
 function add(numbers) {
-    if (numbers === "") {
-      return 0;
-    }
-  
-    const numberArray = numbers.split(",").map(Number); 
-    return numberArray.reduce((sum, num) => sum + num, 0);  
+    if (!numbers) return 0; 
+    
+    return numbers
+      .split(",")
+      .map(Number)
+      .reduce((sum, num) => sum + num, 0);
   }
 
 /* Test cases */
