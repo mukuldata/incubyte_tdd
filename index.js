@@ -7,7 +7,7 @@ function add(numbers) {
     return numbers
       .split(",")
       .map(Number)
-      .reduce((sum, num) => sum + num, 0);
+      .reduce((sum, num) => sum + num, 0); 
   }
 
 /* Test cases */
@@ -31,8 +31,15 @@ function testTwoNumbers() {
     console.assert(result === 6, `Expected 6 but got ${result}`);
 }
 
+// Test 4 : Handle more than two numbers
+function testMultipleNumbers() {
+    const result = add("1,2,3,4");
+    console.assert(result === 10, `Expected 10 but got ${result}`);
+}
+
 // Test calls:
 testEmptyString();
 testSingleNumber();
 testTwoNumbers();
+testMultipleNumbers();
 
