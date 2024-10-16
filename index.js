@@ -10,7 +10,8 @@ function add(numbers) {
   // Handle custom delimiter case
   if (numbers.startsWith("//")) {
     const parts = numbers.split("\n");
-    delimiter = new RegExp(parts[0].slice(2)); 
+    const customDelimiter = parts[0].slice(2);  
+    delimiter = new RegExp(customDelimiter); 
     numberString = parts[1];
   }
 
@@ -103,7 +104,15 @@ function testNegativeNumbers() {
 function testIgnoreNumbersAbove1000() {
     const result = add("2,1001");
     console.assert(result === 2, `Expected 2 but got ${result}`);
-  }
+}
+
+//Test 10 : test for the new delimiter format
+function testLongDelimiter() {
+    const result = add("//[***]\n1***2***3");
+    console.assert(result === 6, `Expected 6 but got ${result}`);
+}
+
+
 
 // Test calls:
 testEmptyString();
@@ -114,5 +123,6 @@ testManyNumbers();
 testNewLineBetweenNumbers();
 testCustomDelimiter();
 testNegativeNumbers();
-testIgnoreNumbersAbove1000()
+testIgnoreNumbersAbove1000();
+testLongDelimiter();
 
