@@ -2,24 +2,28 @@
 
 // add function :
 function add(numbers) {
-    if (!numbers) return 0;
-  
-    let delimiter = /,|\n/;  
-    let numberString = numbers;
-  
-    // Check for custom delimiter format: "//[delimiter]\n[numbers...]"
-    if (numbers.startsWith("//")) {
-      const parts = numbers.split("\n");
-      delimiter = new RegExp(parts[0].slice(2));  
-      numberString = parts[1];  
-    }
-  
-    
-    return numberString
-      .split(delimiter)
-      .map(Number)
-      .reduce((sum, num) => sum + num, 0);
+  if (!numbers) return 0;
+
+  let delimiter = /,|\n/;
+  let numberString = numbers;
+
+  // Handle custom delimiter case
+  if (numbers.startsWith("//")) {
+    const parts = numbers.split("\n");
+    delimiter = new RegExp(parts[0].slice(2)); 
+    numberString = parts[1];
   }
+
+  const numArray = numberString.split(delimiter).map(Number);
+
+  const negatives = numArray.filter((num) => num < 0);
+
+  if (negatives.length > 0) {
+    throw new Error(`negatives not allowed: ${negatives.join(",")}`);
+  }
+
+  return numArray.reduce((sum, num) => sum + num, 0);
+}
   
 
 
@@ -68,7 +72,29 @@ function testNewLineBetweenNumbers() {
 function testCustomDelimiter() {
     const result = add("//;\n1;2");
     console.assert(result === 3, `Expected 3 but got ${result}`);
+}
+
+//Test 8 : Test for negative numbers
+
+function testNegativeNumbers() {
+  try {
+    add("1,-2,3");
+  } catch (e) {
+    console.assert(
+      e.message === "negatives not allowed: -2",
+      `Expected 'negatives not allowed: -2' but got ${e.message}`
+    );
   }
+
+  try {
+    add("-1,-2,3");
+  } catch (e) {
+    console.assert(
+      e.message === "negatives not allowed: -1,-2",
+      `Expected 'negatives not allowed: -1,-2' but got ${e.message}`
+    );
+  }
+}
 
 // Test calls:
 testEmptyString();
@@ -78,4 +104,5 @@ testMultipleNumbers();
 testManyNumbers();
 testNewLineBetweenNumbers();
 testCustomDelimiter();
+testNegativeNumbers();
 
