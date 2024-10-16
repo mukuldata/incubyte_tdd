@@ -5,7 +5,9 @@ function add(numbers) {
     if (numbers === "") {
       return 0;
     }
-    return parseInt(numbers); 
+  
+    const numberArray = numbers.split(",").map(Number); 
+    return numberArray.reduce((sum, num) => sum + num, 0);  
   }
 
 /* Test cases */
@@ -23,8 +25,14 @@ function testSingleNumber() {
     console.assert(result === 1, `Expected 1 but got ${result}`);
   }
 
+// Test 3 : (Two numbers case)
+function testTwoNumbers() {
+    const result = add("1,5");
+    console.assert(result === 6, `Expected 6 but got ${result}`);
+}
 
 // Test calls:
 testEmptyString();
 testSingleNumber();
+testTwoNumbers();
 
