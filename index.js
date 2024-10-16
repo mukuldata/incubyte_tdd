@@ -22,7 +22,9 @@ function add(numbers) {
     throw new Error(`negatives not allowed: ${negatives.join(",")}`);
   }
 
-  return numArray.reduce((sum, num) => sum + num, 0);
+  return numArray
+  .filter(num => num <= 1000)
+  .reduce((sum, num) => sum + num, 0);
 }
   
 
@@ -95,6 +97,13 @@ function testNegativeNumbers() {
     );
   }
 }
+
+// Test 9 : Test to check for numbers greater than 1000
+
+function testIgnoreNumbersAbove1000() {
+    const result = add("2,1001");
+    console.assert(result === 2, `Expected 2 but got ${result}`);
+  }
 
 // Test calls:
 testEmptyString();

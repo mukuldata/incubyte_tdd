@@ -10,3 +10,4 @@
 7. Test for new lines between numbers : Passed
 8. Test for custom delimiters : Passed
 9. Test for negative numbers :Passed
+10. Test to check for numbers greater than 1000 :Passed
