@@ -2,31 +2,47 @@
 
 // add function :
 function add(numbers) {
-  if (!numbers) return 0;
-
-  let delimiter = /,|\n/;
-  let numberString = numbers;
-
-  // Handle custom delimiter case
-  if (numbers.startsWith("//")) {
-    const parts = numbers.split("\n");
-    const customDelimiter = parts[0].slice(2);  
-    delimiter = new RegExp(customDelimiter); 
-    numberString = parts[1];
-  }
-
-  const numArray = numberString.split(delimiter).map(Number);
-
-  const negatives = numArray.filter((num) => num < 0);
-
-  if (negatives.length > 0) {
-    throw new Error(`negatives not allowed: ${negatives.join(",")}`);
-  }
-
-  return numArray
-  .filter(num => num <= 1000)
-  .reduce((sum, num) => sum + num, 0);
+    if (!numbers) return 0;
+  
+    let delimiters = [",", "\n"];
+    let numberString = numbers;
+  
+    // Handle custom delimiter case
+    if (numbers.startsWith("//")) {
+      const parts = numbers.split("\n");
+      const customDelimiterPart = parts[0].slice(2); 
+  
+      if (customDelimiterPart.startsWith("[") && customDelimiterPart.endsWith("]")) {
+        // Handle multiple delimiters in brackets
+        const delimiterRegex = /\[(.*?)\]/g;
+        let match;
+  
+     
+        while ((match = delimiterRegex.exec(customDelimiterPart)) !== null) {
+          delimiters.push(match[1].replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+        }
+      } else {
+        delimiters.push(customDelimiterPart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+      }
+  
+      numberString = parts[1]; 
+    }
+  
+    const delimiterRegexCombined = new RegExp(delimiters.join("|"));
+  
+    const numArray = numberString.split(delimiterRegexCombined).map(Number);
+  
+    const negatives = numArray.filter((num) => num < 0);
+  
+    if (negatives.length > 0) {
+      throw new Error(`negatives not allowed: ${negatives.join(",")}`);
+    }
+  
+    return numArray
+      .filter(num => num <= 1000)
+      .reduce((sum, num) => sum + num, 0);
 }
+  
   
 
 
@@ -112,6 +128,13 @@ function testLongDelimiter() {
     console.assert(result === 6, `Expected 6 but got ${result}`);
 }
 
+//Test 11 : Test for multiple delimiters
+
+function testMultipleDelimiters() {
+    const result = add("//[*][%]\n1*2%3");
+    console.assert(result === 6, `Expected 6 but got ${result}`);
+}
+
 
 
 // Test calls:
@@ -125,4 +148,5 @@ testCustomDelimiter();
 testNegativeNumbers();
 testIgnoreNumbersAbove1000();
 testLongDelimiter();
+testMultipleDelimiters()
 
