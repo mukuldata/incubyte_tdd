@@ -2,47 +2,48 @@
 
 // add function :
 function add(numbers) {
-    if (!numbers) return 0;
-  
-    let delimiters = [",", "\n"];
-    let numberString = numbers;
-  
-    // Handle custom delimiter case
-    if (numbers.startsWith("//")) {
-      const parts = numbers.split("\n");
-      const customDelimiterPart = parts[0].slice(2); 
-  
-      if (customDelimiterPart.startsWith("[") && customDelimiterPart.endsWith("]")) {
-        // Handle multiple delimiters in brackets
-        const delimiterRegex = /\[(.*?)\]/g;
-        let match;
-  
-     
-        while ((match = delimiterRegex.exec(customDelimiterPart)) !== null) {
-          delimiters.push(match[1].replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-        }
-      } else {
-        delimiters.push(customDelimiterPart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  if (!numbers) return 0;
+
+  let delimiters = [",", "\n"];
+  let numberString = numbers;
+
+  // Handle custom delimiter case
+  if (numbers.startsWith("//")) {
+    const parts = numbers.split("\n");
+    const customDelimiterPart = parts[0].slice(2); 
+
+    if (customDelimiterPart.startsWith("[") && customDelimiterPart.endsWith("]")) {
+      const delimiterRegex = /\[(.*?)\]/g;
+      let match;
+
+      // Extract and escape each delimiter
+      while ((match = delimiterRegex.exec(customDelimiterPart)) !== null) {
+        delimiters.push(match[1].replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
       }
-  
-      numberString = parts[1]; 
+    } else {
+      // Single custom delimiter without brackets
+      delimiters.push(customDelimiterPart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')); 
     }
-  
-    const delimiterRegexCombined = new RegExp(delimiters.join("|"));
-  
-    const numArray = numberString.split(delimiterRegexCombined).map(Number);
-  
-    const negatives = numArray.filter((num) => num < 0);
-  
-    if (negatives.length > 0) {
-      throw new Error(`negatives not allowed: ${negatives.join(",")}`);
-    }
-  
-    return numArray
-      .filter(num => num <= 1000)
-      .reduce((sum, num) => sum + num, 0);
+
+    numberString = parts[1]; 
+  }
+
+  const delimiterRegexCombined = new RegExp(delimiters.join("|"));
+
+  // Split the string using the delimiters and convert each part to a number
+  const numArray = numberString.split(delimiterRegexCombined).map(Number);
+
+  // Find and throw an error for negative numbers
+  const negatives = numArray.filter(num => num < 0);
+  if (negatives.length > 0) {
+    throw new Error(`negatives not allowed: ${negatives.join(",")}`);
+  }
+
+  // Filter out numbers greater than 1000 and sum the rest
+  return numArray
+    .filter(num => num <= 1000)
+    .reduce((sum, num) => sum + num, 0);
 }
-  
   
 
 
@@ -135,7 +136,11 @@ function testMultipleDelimiters() {
     console.assert(result === 6, `Expected 6 but got ${result}`);
 }
 
-
+//Test 11 : Test for multiple delimiters with more than one char
+function testDelimiterWithLengthMoreThanOne() {
+  const result = add("//[***]\n1***2***3");
+  console.assert(result === 6, `Expected 6 but got ${result}`);
+}
 
 // Test calls:
 testEmptyString();
@@ -148,5 +153,6 @@ testCustomDelimiter();
 testNegativeNumbers();
 testIgnoreNumbersAbove1000();
 testLongDelimiter();
-testMultipleDelimiters()
+testMultipleDelimiters();
+testDelimiterWithLengthMoreThanOne();
 

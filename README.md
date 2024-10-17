@@ -1,5 +1,7 @@
 # incubyte_tdd
 
+
+
 ## Steps performed (Test cases):
 1. Empty string case :Passed
 2. Single number case : Passed
@@ -13,3 +15,9 @@
 10. Test to check for numbers greater than 1000 :Passed
 11. Test for the new delimiter format :Passed
 12. Test for multiple delimiters :Passed
+13. Test for multiple delimiters with more than one char : Passed
+
+
+## Steps to run file:
+1. Fork repository
+2. Run node index.js 
